@@ -1,17 +1,17 @@
-# Business Hours Module
+# Listing Hours
 
 A small module to check if sotre is open or closed based on a specific date.
 
 ## Installation
 -----
 ```console
-npm install @hafridi/business-hours
+npm install listing-hours
 ```
 
 ## Usage
 
 ```javascript
-const BusinessHours = require('@hafridi/business-hours');
+const ListingHours = require('listing-hours');
 
 const periods = [
     {
@@ -48,11 +48,11 @@ const periods = [
 
 const timezone = 'America/New_York';
 
-const bh = new BusinessHours(periods, timezone);
+const lh = new ListingHours(periods, timezone);
 
-bh.isOpen(); //true or false
-bh.getTodayHours(); // return back a timeline of todays hours
-bh.getHumanReadable(); // returns a array of hours for the week
+lh.isOpen(); //true or false
+lh.getTodayHours(); // return back a timeline of todays hours
+lh.getHumanReadable(); // returns a array of hours for the week
 ```
 
 This uses moment-timezone to pull the current time based on the timezone passed and uses that as the basis for checking of the business is open or closed. This simple library relies on information being passed in a specific way. 

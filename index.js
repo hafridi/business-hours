@@ -1,7 +1,7 @@
 'use strict';
 const moment = require("moment-timezone");
 
-class BusinessHours {
+class ListingHours {
 
     constructor(periods, timezone) { 
         this.periods = periods;
@@ -96,4 +96,4 @@ class BusinessHours {
     }
 }
 
-module.exports = BusinessHours;
+module.exports = ListingHours;
