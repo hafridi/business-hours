@@ -20,6 +20,7 @@ class ListingHours {
 
             if (filtered.length === 0) {
                 readable.push(`${weekdays[i]}: Closed`);
+                continue;
             }
             
             const sorted = filtered.sort((a, b) => moment(a.open.time, 'HHmm') - moment(b.open.time, 'HHmm'));
@@ -27,7 +28,11 @@ class ListingHours {
             let hr = `${weekdays[i]}: `;
             for (let j = 0; j < sorted.length; ++j) {
                 const start = moment(sorted[j].open.time, 'HHmm').format('hh:mm a');
-                const end = moment(sorted[j].close.time, 'HHmm').format('hh:mm a')
+                const end = moment(sorted[j].close.time, 'HHmm').format('hh:mm a');
+                if (start === end) {
+                    hr += `Open 24 hours`;
+                    break;
+                }
                 hr += `${start} - ${end}`;
 
                 if (j < sorted.length - 1) {
