@@ -1,6 +1,6 @@
 {
   "name": "listing-hours",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Tiny utility for checking if store is opened or closed based on specific timezone",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/hafridi/listing-hours"
   },
-  "homepage": "https://github.com/cweise/listing-hours#readme",
+  "homepage": "https://github.com/hafridi/listing-hours#readme",
   "author": "hafridi",
   "license": "ISC",
   "dependencies": {
