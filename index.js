@@ -59,21 +59,27 @@ class ListingHours {
         for (let f of filtered) {
             let start, end;
             if (f.open.day === weekday) {
-                start = moment(f.open.time, 'HHmm').tz(this.timezone).set({
+                start = moment.tz(this.timezone).set({
+                    hour: f.open.time.substr(0, 2),
+                    minute: f.open.time.substr(2, 4),
                     second: 0,
                     millisecond: 0
                 });
                 if (f.close.day !== weekday) {
                     end = moment.tz(this.timezone).endOf('day');
                 } else {
-                    end = moment(f.close.time, 'HHmm').tz(this.timezone).set({
+                    end = moment.tz(this.timezone).set({
+                        hour: f.close.time.substr(0, 2),
+                        minute: f.close.time.substr(2, 4),
                         second: 0,
                         millisecond: 0
                     });
                 }
             } else if (f.close.day === weekday) {
                 start = moment.tz(this.timezone).startOf('day');
-                end = moment(f.close.time, 'HHmm').tz(this.timezone).set({
+                end = moment.tz(this.timezone).set({
+                    hour: f.close.time.substr(0, 2),
+                    minute: f.close.time.substr(2, 4),
                     second: 0,
                     millisecond: 0
                 });

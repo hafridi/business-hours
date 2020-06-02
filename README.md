@@ -1,6 +1,6 @@
 # Listing Hours
 
-A small module to check if sotre is open or closed based on a specific date.
+A small module to check if store is open or closed based on a specific date.
 
 ## Installation
 -----
@@ -55,5 +55,5 @@ lh.getTodayHours(); // return back a timeline of todays hours
 lh.getHumanReadable(); // returns a array of hours for the week
 ```
 
-This uses moment-timezone to pull the current time based on the timezone passed and uses that as the basis for checking of the business is open or closed. This simple library relies on information being passed in a specific way. 
+This uses moment-timezone to pull the current time based on the timezone passed and uses that as the basis for checking if the business is open or closed. This simple library relies on information being passed in a specific way. 
 
