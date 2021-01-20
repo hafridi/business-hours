@@ -3,7 +3,7 @@ const moment = require("moment-timezone");
 
 class ListingHours {
 
-    constructor(periods, timezone) { 
+    constructor(periods, timezone) {
         this.periods = periods;
         this.timezone = timezone;
     }
@@ -11,7 +11,7 @@ class ListingHours {
     /**
      * Returns Array of readable hours
      */
-    getHumanReadable() { 
+    getHumanReadable() {
         const readable = [];
         const weekdays = moment.weekdays();
 
@@ -22,7 +22,7 @@ class ListingHours {
                 readable.push(`${weekdays[i]}: Closed`);
                 continue;
             }
-            
+
             const sorted = filtered.sort((a, b) => moment(a.open.time, 'HHmm') - moment(b.open.time, 'HHmm'));
 
             let hr = `${weekdays[i]}: `;
@@ -47,7 +47,7 @@ class ListingHours {
     /**
      * Returns business hours for the day
      */
-    getTodaysHours() { 
+    getTodaysHours() {
         const current = moment.tz(this.timezone);
         let weekday = current.weekday();
         const filtered = this.periods.filter(p => {
@@ -92,6 +92,78 @@ class ListingHours {
         }
 
         return timeline;
+    }
+
+    /**
+     * Return future time line from current time
+     */
+    getFutureTimeline() {
+        const weekdays = [0, 1, 2, 3, 4, 5, 6];
+        const current = moment.tz(this.timezone);
+        const timeline = [];
+        for (let day in weekdays) {
+            const filtered = this.periods.filter(p => p.open.day == day);
+            for (let f of filtered) {
+                let start, end;
+                if (f.open.day === parseInt(day)) {
+                    start = moment.tz(this.timezone).startOf('week').set({
+                        hour: f.open.time.substr(0, 2),
+                        minute: f.open.time.substr(2, 4),
+                        second: 0,
+                        millisecond: 0
+                    }).add(day, "days");
+                    if (f.close.day !== parseInt(day)) {
+                        end = moment.tz(this.timezone).startOf('week').endOf('day').add(day, "days");;
+                    } else {
+                        end = moment.tz(this.timezone).startOf('week').set({
+                            hour: f.close.time.substr(0, 2),
+                            minute: f.close.time.substr(2, 4),
+                            second: 0,
+                            millisecond: 0
+                        }).add(day, "days");;
+                    }
+                } else if (f.close.day === parseInt(day)) {
+                    start = moment.tz(this.timezone).startOf('week').startOf('day').add(day, "days");;
+                    end = moment.tz(this.timezone).startOf('week').set({
+                        hour: f.close.time.substr(0, 2),
+                        minute: f.close.time.substr(2, 4),
+                        second: 0,
+                        millisecond: 0
+                    }).add(day, "days");
+                }
+
+                timeline.push({
+                    start,
+                    end
+                });
+
+            }
+        }
+        for (let t of timeline) {
+            if (current.isBetween(t.start, t.end)) continue;
+
+            if (t.start < current) {
+                t.start.add(7, "days");
+                t.end.add(7, "days");
+            }
+        }
+
+        const sorted = timeline.sort((a, b) => a.start - b.start);
+        return sorted;
+    }
+
+    /**
+     * Gets the next instance of when a time is reached
+     */
+    getNextEventTime() {
+        const timeline = this.getFutureTimeline();
+        if (timeline.length === 0) { return null; }
+        const current = moment.tz(this.timezone);
+        let nextEvent = timeline[0];
+        if (nextEvent.start < current) {
+            return nextEvent.end;
+        }
+        return nextEvent.start;
     }
 
     /**
